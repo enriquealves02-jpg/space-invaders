@@ -1,0 +1,6 @@
+torch
+opencv-python
+mss
+websockets
+numpy
+mediapipe

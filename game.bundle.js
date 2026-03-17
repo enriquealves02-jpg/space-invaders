@@ -1119,24 +1119,67 @@ var inputHandler = {
     socket.onopen = function() {
       console.log('WebSocket connection established');
     };
-    
+
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
-      
+
       if (data.type === 'keydown') {
         inputHandler.onKeydown({keyCode: data.keyCode});
       } else if (data.type === 'keyup') {
         inputHandler.onKeyup({keyCode: data.keyCode});
       }
     };
-    
+
     socket.onerror = function(error) {
       console.error('WebSocket error:', error);
     };
-    
+
     socket.onclose = function() {
       console.log('WebSocket connection closed');
     };
+
+    // Send game state to WebSocket every 100ms for AI agent
+    setInterval(function() {
+      if (socket.readyState === WebSocket.OPEN && window.game) {
+        var g = window.game;
+        var invaderCount = 0;
+        var playerX = 0;
+        var playerLives = 0;
+        var entities = g.state.entities || {};
+
+        for (var e in entities) {
+          if (entities[e].group === 'invader') invaderCount++;
+          if (entities[e].group === 'player') {
+            playerX = entities[e].state.position.x;
+            playerLives = entities[e].state.lives;
+          }
+        }
+
+        var stateMsg = JSON.stringify({
+          type: 'game_state',
+          started: g.state.start,
+          win: g.state.win,
+          lost: g.state.lost,
+          lives: playerLives,
+          invaders: invaderCount,
+          playerX: playerX
+        });
+        socket.send(stateMsg);
+      }
+    }, 100);
+
+    // Auto-restart game after win/lose for AI training
+    setInterval(function() {
+      if (window.game && (window.game.state.win || window.game.state.lost) && !window.game.state.start) {
+        // Simulate ENTER press to restart
+        setTimeout(function() {
+          inputHandler.onKeydown({keyCode: 13});
+          setTimeout(function() {
+            inputHandler.onKeyup({keyCode: 13});
+          }, 100);
+        }, 2000);
+      }
+    }, 3000);
   }
 };
 
