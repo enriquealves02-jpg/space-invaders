@@ -85,6 +85,7 @@ async def play():
         game_state = None
         games_played = 0
         wins = 0
+        game_active = True
 
         for _ in range(FRAME_STACK):
             frame = capture_frame(sct, game_region)
@@ -94,14 +95,25 @@ async def play():
 
         try:
             while True:
-                # Read game state
-                try:
-                    msg = await asyncio.wait_for(websocket.recv(), timeout=0.01)
-                    data = json.loads(msg)
-                    if data.get("type") == "game_state":
-                        game_state = data
-                except asyncio.TimeoutError:
-                    pass
+                # Read ALL available game state messages (drain buffer)
+                while True:
+                    try:
+                        msg = await asyncio.wait_for(websocket.recv(), timeout=0.005)
+                        data = json.loads(msg)
+                        if data.get("type") == "game_state":
+                            if not game_active:
+                                if data.get("started") and not data.get("win") and not data.get("lost"):
+                                    game_active = True
+                                    game_state = None
+                            else:
+                                game_state = data
+                    except (asyncio.TimeoutError, json.JSONDecodeError):
+                        break
+
+                # Skip if waiting for restart
+                if not game_active:
+                    await asyncio.sleep(0.05)
+                    continue
 
                 # Capture and decide
                 frame = capture_frame(sct, game_region)
@@ -114,7 +126,7 @@ async def play():
                     action_idx = q_values.argmax(dim=1).item()
 
                 action = ACTIONS[action_idx]
-                # Always fire first (spam fire like training)
+                # Always fire (spam fire like training)
                 await websocket.send("FIRE")
                 if action is not None and action != "FIRE":
                     await websocket.send(action)
@@ -130,21 +142,12 @@ async def play():
                         print(f"Game {games_played}: LOST  (Win rate: {wins}/{games_played} = {100*wins/games_played:.0f}%)")
 
                     game_state = None
-                    await asyncio.sleep(3)
-                    await websocket.send("ENTER")
-                    await asyncio.sleep(2)
+                    game_active = False
 
-                    # Drain stale messages and wait for game to restart
-                    for _ in range(50):
-                        try:
-                            msg = await asyncio.wait_for(websocket.recv(), timeout=0.1)
-                            data = json.loads(msg)
-                            if data.get("type") == "game_state":
-                                if data.get("started") and not data.get("win") and not data.get("lost"):
-                                    game_state = None
-                                    break
-                        except asyncio.TimeoutError:
-                            pass
+                    await asyncio.sleep(0.5)
+                    await websocket.send("ENTER")
+                    await asyncio.sleep(0.5)
+                    await websocket.send("ENTER")
 
                     for _ in range(FRAME_STACK):
                         f = capture_frame(sct, game_region)
