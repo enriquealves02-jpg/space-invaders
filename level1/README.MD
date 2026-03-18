@@ -7,6 +7,7 @@ Ce module remplace le contrôleur clavier basique (`control_module.py`) par une 
 En plus de **Node.js** (pour le serveur WebSocket), vous aurez besoin des bibliothèques Python suivantes :
 ```bash
 pip install websockets opencv-python mediapipe numpy
+```
 
 ## 🎮 Commandes (Gestes)
 
