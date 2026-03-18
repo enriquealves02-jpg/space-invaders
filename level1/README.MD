@@ -7,3 +7,10 @@ Ce module remplace le contrôleur clavier basique (`control_module.py`) par une 
 En plus de **Node.js** (pour le serveur WebSocket), vous aurez besoin des bibliothèques Python suivantes :
 ```bash
 pip install websockets opencv-python mediapipe numpy
+
+## 🎮 Commandes (Gestes)
+
+Le système détecte la position et la forme de vos mains pour envoyer des commandes au jeu :
+  - Gauche / Droite (LEFT / RIGHT) : Placez votre main dans la moitié gauche ou droite de l'écran.
+  - Tirer (FIRE) : Levez uniquement l'index.
+  - Valider / Start (ENTER) : Fermez le poing.
