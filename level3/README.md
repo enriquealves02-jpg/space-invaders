@@ -1,4 +1,4 @@
-# **🎾 Niveau 3 : Suivi d'Objet par Couleur
+# **🎾 Niveau 3 : Suivi d'Objet par Couleur**
 
 Ce module vous permet d'utiliser n'importe quel objet coloré (balle, stylo, téléphone) comme manette pour Space Invaders. Il remplace le fichier `control_module.py` et utilise **OpenCV** pour suivre l'objet en espace HSV.
 
