@@ -23,6 +23,7 @@ Pour jouer, vous devez lancer trois éléments en parallèle :
 ```bash
 python -m http.server 8000
 ```
+Puis ouvrez [http:/²/localhost:8000] (http://localhost:8000) dans votre navigateur.
 2. **Le pont Websocket** : Dans un autre terminal, lancez le serveur Node.js :
 ```bash
 node server.js
