@@ -23,11 +23,13 @@ Pour jouer, vous devez lancer trois éléments en parallèle :
 ```bash
 python -m http.server 8000
 ```
-Puis ouvrez [http:/²/localhost:8000](http://localhost:8000) dans votre navigateur.
+Puis ouvrez http://localhost:8000 dans votre navigateur.
+
 2. **Le pont Websocket** : Dans un autre terminal, lancez le serveur Node.js :
 ```bash
 node server.js
 ```
+
 3. **Le Contrôleur de Vision (Niveau 1) : Lancez ce script Python :
 ```bash
 python level1_hands.py
