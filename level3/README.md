@@ -33,7 +33,7 @@ Puis ouvrez http://localhost:8000 dans votre navigateur.
 ```bash
 node server.js
 ```
-3. **Le Contrôleur Couleur (Niveau 3) : Lancez ce script Python :
+3. **Le Contrôleur Couleur (Niveau 3)** : Lancez ce script Python :
 ```bash
 python level3_color.py
 ```
