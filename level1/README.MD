@@ -30,7 +30,7 @@ Puis ouvrez http://localhost:8000 dans votre navigateur.
 node server.js
 ```
 
-3. **Le Contrôleur de Vision (Niveau 1) : Lancez ce script Python :
+3. **Le Contrôleur de Vision (Niveau 1)** : Lancez ce script Python :
 ```bash
 python level1_hands.py
 ```
