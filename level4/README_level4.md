@@ -99,6 +99,6 @@ Navigateur (jeu)  <-- mss (capture ecran) -->  ai_agent.py (CNN + DQN)
 - **Output** : Q-values pour 4 actions (RIEN, GAUCHE, DROITE, TIR)
 - **Reward** : +100/kill, -1000/vie perdue, +5000/victoire
 
-## License
+## Licence
 
 MIT License
